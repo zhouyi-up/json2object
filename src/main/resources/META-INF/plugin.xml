@@ -1,0 +1,25 @@
+<idea-plugin>
+    <id>cn.jtools.json2object</id>
+    <name>Json To Object</name>
+    <vendor email="732007737@qq.com" url="https://jtools.cn">Jtools</vendor>
+
+    <description><![CDATA[
+    Enter short description for your plugin here.<br>
+    <em>most HTML tags may be used</em>
+    ]]></description>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <action id="Json2Object" class="cn.jtools.json2object.anactions.Json2ObjectAnAction" text="Json to Object">
+            <add-to-group group-id="GenerateGroup" anchor="first"/>
+        </action>
+    </actions>
+</idea-plugin>
