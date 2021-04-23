@@ -13,7 +13,7 @@ public class Json2ObjectDialogWrapper extends DialogWrapper {
     private final Json2ObjectView.EditModel editModel;
 
     public Json2ObjectDialogWrapper(Json2ObjectView.EditModel editModel){
-        super(true);
+        super(false);
 
         this.editModel = editModel;
 

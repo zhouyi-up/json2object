@@ -12,11 +12,13 @@ import java.util.List;
  */
 public class Json2ObjectConfirmDialogWrapper extends DialogWrapper {
 
-    private Json2ObjectConfirmView.ConfirmModel confirmModel;
+    private final Json2ObjectConfirmView.ConfirmModel confirmModel;
 
     public Json2ObjectConfirmDialogWrapper(Json2ObjectConfirmView.ConfirmModel confirmModel){
         super(true);
+
         this.confirmModel = confirmModel;
+        init();
     }
 
     @Override

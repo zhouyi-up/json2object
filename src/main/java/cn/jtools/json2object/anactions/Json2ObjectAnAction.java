@@ -1,6 +1,8 @@
 package cn.jtools.json2object.anactions;
 
 import cn.jtools.json2object.utils.JsonUtils;
+import cn.jtools.json2object.view.Json2ObjectConfirmDialogWrapper;
+import cn.jtools.json2object.view.Json2ObjectConfirmView;
 import cn.jtools.json2object.view.Json2ObjectDialogWrapper;
 import cn.jtools.json2object.view.Json2ObjectView;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -46,9 +48,16 @@ public class Json2ObjectAnAction extends AnAction {
             } catch (JsonProcessingException jsonProcessingException) {
                 jsonProcessingException.printStackTrace();
                 //TODO
+
+                return;
             }
         }
+        Json2ObjectConfirmView.ConfirmModel confirmModel = new Json2ObjectConfirmView.ConfirmModel();
+        confirmModel.setFieldNodes(fieldNodeList);
+        Json2ObjectConfirmDialogWrapper json2ObjectConfirmDialogWrapper = new Json2ObjectConfirmDialogWrapper(confirmModel);
+        boolean confirm = json2ObjectConfirmDialogWrapper.showAndGet();
+        if (confirm){
 
-
+        }
     }
 }
