@@ -1,7 +1,9 @@
 package cn.jtools.json2object.utils;
 
 import cn.jtools.json2object.enums.FieldType;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 
@@ -10,6 +12,12 @@ import java.io.File;
  * @author liujun
  */
 public final class JsonUtils {
+
+    private static ObjectMapper objectMapper;
+
+    static {
+        objectMapper = new ObjectMapper();
+    }
 
     public static FieldType check(JsonNode jsonNode){
         if (jsonNode.isArray()){
@@ -46,5 +54,14 @@ public final class JsonUtils {
             return FieldType.SHORT;
         }
         return FieldType.STRING;
+    }
+
+    public static String checkJson(String jsonString){
+        try {
+            objectMapper.readTree(jsonString);
+            return null;
+        } catch (JsonProcessingException e) {
+            return e.getMessage();
+        }
     }
 }

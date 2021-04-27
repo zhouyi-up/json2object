@@ -25,4 +25,11 @@ public class Json2ObjectDialogWrapper extends DialogWrapper {
     protected @Nullable JComponent createCenterPanel() {
         return new Json2ObjectView(editModel);
     }
+
+    @Override
+    protected void doOKAction() {
+        if (editModel.isExitAndOk()){
+            super.doOKAction();
+        }
+    }
 }

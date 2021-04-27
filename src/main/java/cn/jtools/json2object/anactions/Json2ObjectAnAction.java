@@ -34,7 +34,6 @@ public class Json2ObjectAnAction extends AnAction {
         List<FieldNode> fieldNodeList = new ArrayList<>();
 
         String jsonContext = editModel.getJsonContext();
-        System.out.println(jsonContext);
         if (StringUtils.isNotEmpty(jsonContext)){
             ObjectMapper mapper = new ObjectMapper();
             try {
@@ -48,7 +47,6 @@ public class Json2ObjectAnAction extends AnAction {
             } catch (JsonProcessingException jsonProcessingException) {
                 jsonProcessingException.printStackTrace();
                 //TODO
-
                 return;
             }
         }
