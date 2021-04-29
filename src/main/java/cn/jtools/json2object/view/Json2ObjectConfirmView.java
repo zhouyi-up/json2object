@@ -1,6 +1,7 @@
 package cn.jtools.json2object.view;
 
-import cn.jtools.json2object.anactions.FieldNode;
+import cn.jtools.json2object.enums.FieldType;
+import cn.jtools.json2object.model.JsonTypeModel;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.treeStructure.Tree;
 import lombok.Getter;
@@ -25,25 +26,36 @@ public class Json2ObjectConfirmView extends JPanel {
 
     public Json2ObjectConfirmView(ConfirmModel confirmModel){
         this.confirmModel = confirmModel;
+
         BorderLayout borderLayout = new BorderLayout();
         borderLayout.setVgap(10);
         borderLayout.setHgap(10);
         setLayout(borderLayout);
 
-        JsonRootTreeNode jsonRootTreeNode = new JsonRootTreeNode();
-        if (confirmModel.getFieldNodes() != null && !confirmModel.getFieldNodes().isEmpty()){
-            confirmModel.getFieldNodes().forEach(f -> {
-                jsonRootTreeNode.add(new JsonTreeNode(f));
-            });
-        }
+        initTreePanel(confirmModel);
+        initSettingPanel(confirmModel);
 
+        setVisible(true);
+    }
+
+    /**
+     * 初始化json树
+     * @param confirmModel
+     */
+    private void initTreePanel(ConfirmModel confirmModel) {
+        JsonRootTreeNode jsonRootTreeNode = new JsonRootTreeNode();
+        initTree(jsonRootTreeNode, confirmModel.getJsonTypeModel());
         tree = new Tree(jsonRootTreeNode);
         tree.setCellRenderer(new JsonTreeCellRenderer());
         JBScrollPane jbScrollPane = new JBScrollPane(tree);
-
         add(jbScrollPane, BorderLayout.WEST);
+    }
 
-
+    /**
+     * 初始化勾选选项
+     * @param confirmModel
+     */
+    private void initSettingPanel(ConfirmModel confirmModel) {
         JPanel settingPanel = new JPanel();
         GridLayout gridLayout = new GridLayout(10, 1);
         gridLayout.setVgap(10);
@@ -81,22 +93,35 @@ public class Json2ObjectConfirmView extends JPanel {
         settingPanel.add(lombokPanel);
 
         add(settingPanel, BorderLayout.CENTER);
+    }
 
-        setVisible(true);
+    public void initTree(JsonTreeNode jsonTreeNode, JsonTypeModel jsonTypeModel){
+        List<JsonTypeModel> childList = jsonTypeModel.getChildList();
+        for (JsonTypeModel typeModel : childList) {
+            FieldType type = typeModel.getType();
+            JsonTreeNode child;
+            if (type == FieldType.ARR || type == FieldType.OBJECT){
+                child = new JsonTreeNode(typeModel, false);
+                initTree(child, typeModel);
+            }else {
+                child = new JsonTreeNode(typeModel, false);
+            }
+            jsonTreeNode.add(child);
+        }
     }
 
     @Getter
     @Setter
     public static class ConfirmModel{
-        private List<FieldNode> fieldNodes;
+        private JsonTypeModel jsonTypeModel;
         private boolean isLombok;
 
-        public List<FieldNode> getFieldNodes() {
-            return fieldNodes;
+        public JsonTypeModel getJsonTypeModel() {
+            return jsonTypeModel;
         }
 
-        public void setFieldNodes(List<FieldNode> fieldNodes) {
-            this.fieldNodes = fieldNodes;
+        public void setJsonTypeModel(JsonTypeModel jsonTypeModel) {
+            this.jsonTypeModel = jsonTypeModel;
         }
 
         public boolean isLombok() {

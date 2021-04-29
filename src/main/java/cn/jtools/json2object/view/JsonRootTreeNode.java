@@ -5,9 +5,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 /**
  * @author liujun
  */
-public class JsonRootTreeNode extends DefaultMutableTreeNode {
+public class JsonRootTreeNode extends JsonTreeNode {
 
     public JsonRootTreeNode(){
-        super("Root                  ");
+        super(null, true);
     }
 }

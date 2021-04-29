@@ -17,7 +17,8 @@ public enum FieldType {
     BOOLEAN("boolean"),
     FLOAT("float"),
     SHORT("short"),
-    STRING("String")
+    STRING("String"),
+    OBJECT("object")
 
 
     ;

@@ -1,5 +1,6 @@
 package cn.jtools.json2object.anactions;
 
+import cn.jtools.json2object.model.JsonTypeModel;
 import cn.jtools.json2object.utils.JsonUtils;
 import cn.jtools.json2object.view.Json2ObjectConfirmDialogWrapper;
 import cn.jtools.json2object.view.Json2ObjectConfirmView;
@@ -31,19 +32,14 @@ public class Json2ObjectAnAction extends AnAction {
             return;
         }
 
-        List<FieldNode> fieldNodeList = new ArrayList<>();
+        JsonTypeModel jsonTypeModel = new JsonTypeModel();
 
         String jsonContext = editModel.getJsonContext();
         if (StringUtils.isNotEmpty(jsonContext)){
             ObjectMapper mapper = new ObjectMapper();
             try {
                 JsonNode jsonNode = mapper.readTree(jsonContext);
-                Iterator<String> stringIterator = jsonNode.fieldNames();
-                while (stringIterator.hasNext()){
-                    String key = stringIterator.next();
-                    JsonNode valueNode = jsonNode.path(key);
-                    fieldNodeList.add(new FieldNode(key, JsonUtils.check(valueNode).getTypeName()));
-                }
+                JsonUtils.generate(jsonNode,jsonTypeModel);
             } catch (JsonProcessingException jsonProcessingException) {
                 jsonProcessingException.printStackTrace();
                 //TODO
@@ -51,7 +47,8 @@ public class Json2ObjectAnAction extends AnAction {
             }
         }
         Json2ObjectConfirmView.ConfirmModel confirmModel = new Json2ObjectConfirmView.ConfirmModel();
-        confirmModel.setFieldNodes(fieldNodeList);
+        confirmModel.setJsonTypeModel(jsonTypeModel);
+
         Json2ObjectConfirmDialogWrapper json2ObjectConfirmDialogWrapper = new Json2ObjectConfirmDialogWrapper(confirmModel);
         boolean confirm = json2ObjectConfirmDialogWrapper.showAndGet();
         if (confirm){
