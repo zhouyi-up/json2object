@@ -8,6 +8,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 public class JsonRootTreeNode extends DefaultMutableTreeNode {
 
     public JsonRootTreeNode(){
-        super("Root");
+        super("Root                  ");
     }
 }

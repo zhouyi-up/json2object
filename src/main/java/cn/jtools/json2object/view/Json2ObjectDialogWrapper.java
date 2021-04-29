@@ -1,6 +1,9 @@
 package cn.jtools.json2object.view;
 
+import com.intellij.openapi.externalSystem.model.task.event.DefaultOperationResult;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.ui.popup.JBPopupFactory;
+import com.intellij.openapi.ui.popup.ListPopup;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -30,6 +33,8 @@ public class Json2ObjectDialogWrapper extends DialogWrapper {
     protected void doOKAction() {
         if (editModel.isExitAndOk()){
             super.doOKAction();
+            return;
         }
+        new ConfirmDialogWrapper().show();
     }
 }

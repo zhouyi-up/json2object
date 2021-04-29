@@ -1,16 +1,12 @@
 package cn.jtools.json2object.view;
 
 import cn.jtools.json2object.anactions.FieldNode;
-import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBScrollPane;
-import com.intellij.ui.table.JBTable;
 import com.intellij.ui.treeStructure.Tree;
-import com.intellij.util.ui.JBValue;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.util.List;
@@ -29,7 +25,10 @@ public class Json2ObjectConfirmView extends JPanel {
 
     public Json2ObjectConfirmView(ConfirmModel confirmModel){
         this.confirmModel = confirmModel;
-        setLayout(new BorderLayout());
+        BorderLayout borderLayout = new BorderLayout();
+        borderLayout.setVgap(10);
+        borderLayout.setHgap(10);
+        setLayout(borderLayout);
 
         JsonRootTreeNode jsonRootTreeNode = new JsonRootTreeNode();
         if (confirmModel.getFieldNodes() != null && !confirmModel.getFieldNodes().isEmpty()){
@@ -46,14 +45,41 @@ public class Json2ObjectConfirmView extends JPanel {
 
 
         JPanel settingPanel = new JPanel();
-        settingPanel.setBorder(BorderFactory.createTitledBorder("setting"));
-        settingPanel.setLayout(new GridLayout(10,1));
+        GridLayout gridLayout = new GridLayout(10, 1);
+        gridLayout.setVgap(10);
 
-        JCheckBox lombokCheckBox = new JCheckBox("Lombok");
+        settingPanel.setLayout(gridLayout);
+
+        //base
+        JPanel basePanel = new JPanel();
+        GridLayout panelGridLayout = new GridLayout(1, 10);
+        panelGridLayout.setHgap(10);
+
+        basePanel.setLayout(panelGridLayout);
+        basePanel.setBorder(BorderFactory.createTitledBorder("Base"));
+        JCheckBox getCheck = new JCheckBox("get()");
+        getCheck.addItemListener(event -> {
+
+        });
+        basePanel.add(getCheck);
+        JCheckBox setCheck = new JCheckBox("set()");
+        setCheck.addItemListener(event -> {
+
+        });
+        basePanel.add(setCheck);
+        settingPanel.add(basePanel);
+
+        // Lombok
+        JPanel lombokPanel = new JPanel();
+        lombokPanel.setBorder(BorderFactory.createTitledBorder("Lombok"));
+        lombokPanel.setLayout(panelGridLayout);
+        JCheckBox lombokCheckBox = new JCheckBox("Data");
         lombokCheckBox.addItemListener(event -> {
             confirmModel.setLombok(ItemEvent.SELECTED == event.getStateChange());
         });
-        settingPanel.add(lombokCheckBox);
+        lombokPanel.add(lombokCheckBox);
+        settingPanel.add(lombokPanel);
+
         add(settingPanel, BorderLayout.CENTER);
 
         setVisible(true);

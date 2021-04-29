@@ -18,6 +18,7 @@ public class Json2ObjectView extends JPanel {
     private EditModel editModel;
     private ObjectMapper objectMapper;
     private JLabel label;
+    private JTextArea textArea;
 
     public Json2ObjectView(EditModel editModel){
         this.editModel = editModel;
@@ -52,7 +53,18 @@ public class Json2ObjectView extends JPanel {
         add(jTextArea, BorderLayout.CENTER);
 
         label = new JLabel();
-        add(label, BorderLayout.SOUTH);
+
+
+        textArea = new JTextArea(2, 100);
+        textArea.setWrapStyleWord(true);
+        textArea.setLineWrap(true);
+        textArea.setOpaque(false);
+        textArea.setEditable(false);
+        textArea.setFocusable(false);
+        textArea.setBackground(UIManager.getColor("Label.background"));
+        textArea.setFont(UIManager.getFont("Label.font"));
+        textArea.setBorder(UIManager.getBorder("Label.border"));
+        add(textArea, BorderLayout.SOUTH);
 
         setVisible(true);
     }
@@ -60,8 +72,8 @@ public class Json2ObjectView extends JPanel {
     private void checkJson(JTextArea jTextArea, EditModel editModel) {
         String error = JsonUtils.checkJson(jTextArea.getText());
         editModel.setExitAndOk(error == null);
-        label.setText(error == null?"success":error);
-        label.setForeground(error == null?Color.GREEN:Color.RED);
+        textArea.setText(error == null?"success":error);
+        textArea.setForeground(error == null?Color.GREEN:Color.RED);
     }
 
 
