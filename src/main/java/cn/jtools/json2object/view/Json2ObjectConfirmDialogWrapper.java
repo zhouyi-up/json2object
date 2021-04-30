@@ -19,7 +19,7 @@ public class Json2ObjectConfirmDialogWrapper extends DialogWrapper {
 
         this.confirmModel = confirmModel;
         init();
-        setSize(800,500);
+        setSize(500,500);
     }
 
     @Override

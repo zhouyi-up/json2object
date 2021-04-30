@@ -2,14 +2,23 @@ package cn.jtools.json2object.view;
 
 import cn.jtools.json2object.enums.FieldType;
 import cn.jtools.json2object.model.JsonTypeModel;
+import com.intellij.icons.AllIcons;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.treeStructure.Tree;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.ItemEvent;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
 
@@ -21,6 +30,7 @@ public class Json2ObjectConfirmView extends JPanel {
     private final static Vector<String> TITLE_VECTOR = new Vector<>();
 
     Tree tree;
+    JsonRootTreeNode jsonRootTreeNode;
 
     private final Json2ObjectConfirmView.ConfirmModel confirmModel;
 
@@ -43,12 +53,42 @@ public class Json2ObjectConfirmView extends JPanel {
      * @param confirmModel
      */
     private void initTreePanel(ConfirmModel confirmModel) {
-        JsonRootTreeNode jsonRootTreeNode = new JsonRootTreeNode();
+        JPanel dataPanel = new JPanel();
+        dataPanel.setLayout(new BorderLayout());
+
+        DefaultActionGroup defaultActionGroup = new DefaultActionGroup();
+        AnAction expAll = new AnAction(AllIcons.Actions.Expandall) {
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                expandAll(new TreePath(jsonRootTreeNode), true);
+            }
+        };
+        defaultActionGroup.add(expAll);
+
+        AnAction collapseall = new AnAction(AllIcons.Actions.Collapseall) {
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent e) {
+                expandAll(new TreePath(jsonRootTreeNode), false);
+            }
+        };
+        defaultActionGroup.add(collapseall);
+
+        ActionManager instance = ActionManager.getInstance();
+        JComponent jsonTree = instance.createActionToolbar("JsonTree", defaultActionGroup, true)
+                .getComponent();
+
+        dataPanel.add(jsonTree, BorderLayout.NORTH);
+
+
+        jsonRootTreeNode = new JsonRootTreeNode();
         initTree(jsonRootTreeNode, confirmModel.getJsonTypeModel());
         tree = new Tree(jsonRootTreeNode);
         tree.setCellRenderer(new JsonTreeCellRenderer());
         JBScrollPane jbScrollPane = new JBScrollPane(tree);
-        add(jbScrollPane, BorderLayout.WEST);
+
+        dataPanel.add(jbScrollPane, BorderLayout.CENTER);
+        add(dataPanel, BorderLayout.CENTER);
+
     }
 
     /**
@@ -64,7 +104,7 @@ public class Json2ObjectConfirmView extends JPanel {
 
         //base
         JPanel basePanel = new JPanel();
-        GridLayout panelGridLayout = new GridLayout(1, 10);
+        GridLayout panelGridLayout = new GridLayout(2, 3);
         panelGridLayout.setHgap(10);
 
         basePanel.setLayout(panelGridLayout);
@@ -79,8 +119,15 @@ public class Json2ObjectConfirmView extends JPanel {
 
         });
         basePanel.add(setCheck);
-        settingPanel.add(basePanel);
 
+
+        JCheckBox toStringCheck = new JCheckBox("toString()");
+        toStringCheck.addItemListener(e -> {
+
+        });
+        basePanel.add(toStringCheck);
+
+        settingPanel.add(basePanel);
         // Lombok
         JPanel lombokPanel = new JPanel();
         lombokPanel.setBorder(BorderFactory.createTitledBorder("Lombok"));
@@ -92,9 +139,14 @@ public class Json2ObjectConfirmView extends JPanel {
         lombokPanel.add(lombokCheckBox);
         settingPanel.add(lombokPanel);
 
-        add(settingPanel, BorderLayout.CENTER);
+        add(settingPanel, BorderLayout.EAST);
     }
 
+    /**
+     * 初始化树结构
+     * @param jsonTreeNode
+     * @param jsonTypeModel
+     */
     public void initTree(JsonTreeNode jsonTreeNode, JsonTypeModel jsonTypeModel){
         List<JsonTypeModel> childList = jsonTypeModel.getChildList();
         for (JsonTypeModel typeModel : childList) {
@@ -108,6 +160,24 @@ public class Json2ObjectConfirmView extends JPanel {
             }
             jsonTreeNode.add(child);
         }
+    }
+
+    public void expandAll(TreePath path, boolean expand){
+        TreeNode lastPathComponent = (TreeNode) path.getLastPathComponent();
+        if (lastPathComponent.getChildCount() > 0) {
+
+            for ( Enumeration<? extends TreeNode> children = lastPathComponent.children();children.hasMoreElements();){
+                TreeNode treeNode = children.nextElement();
+                TreePath treePath = path.pathByAddingChild(treeNode);
+                expandAll(treePath, expand);
+            }
+        }
+        if (expand){
+            tree.expandPath(path);
+        }else {
+            tree.collapsePath(path);
+        }
+
     }
 
     @Getter
