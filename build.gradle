@@ -26,8 +26,8 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-//    version '2021.1.1'
-    localPath '/Applications/IntelliJ IDEA CE.app'
+    version '2021.1'
+//    localPath '/Applications/IntelliJ IDEA CE.app'
 }
 patchPluginXml {
     changeNotes """
