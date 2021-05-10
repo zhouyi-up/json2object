@@ -7,7 +7,14 @@ group 'cn.jtools'
 version '1.0-SNAPSHOT'
 
 repositories {
+    mavenLocal()
+    maven { url "https://www.jetbrains.com/intellij-repository/releases" }
+    maven { url "https://cache-redirector.jetbrains.com/intellij-dependencies" }
+    maven { url "https://jetbrains.bintray.com/intellij-third-party-dependencies" }
+    maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
     mavenCentral()
+    google()
+    maven { url "https://www.jetbrains.com/intellij-repository/snapshots" }
 }
 
 dependencies {
@@ -19,7 +26,8 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version '2021.1'
+//    version '2021.1.1'
+    localPath '/Applications/IntelliJ IDEA CE.app'
 }
 patchPluginXml {
     changeNotes """

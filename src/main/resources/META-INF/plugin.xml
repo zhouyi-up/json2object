@@ -21,5 +21,8 @@
         <action id="Json2Object" class="cn.jtools.json2object.anactions.Json2ObjectAnAction" text="Json to Object">
             <add-to-group group-id="GenerateGroup" anchor="first"/>
         </action>
+        <action id="TestAnAction" class="cn.jtools.json2object.anactions.TestAnAction" text="TestAnAction">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
     </actions>
 </idea-plugin>

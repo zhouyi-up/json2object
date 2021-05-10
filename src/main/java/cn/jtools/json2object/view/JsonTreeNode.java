@@ -1,6 +1,5 @@
 package cn.jtools.json2object.view;
 
-import cn.jtools.json2object.anactions.FieldNode;
 import cn.jtools.json2object.model.JsonTypeModel;
 
 import javax.swing.tree.DefaultMutableTreeNode;
